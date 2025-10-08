@@ -1,0 +1,55 @@
+﻿'''  _ _____                           _   _           
+''' (_)  __ \                         | | (_)          
+'''  _| |__) | __ ___  _ __   ___ _ __| |_ _  ___  ___ 
+''' | |  ___/ '__/ _ \| '_ \ / _ \ '__| __| |/ _ \/ __|
+''' | | |   | | | (_) | |_) |  __/ |  | |_| |  __/\__ \
+''' |_|_|   |_|  \___/| .__/ \___|_|   \__|_|\___||___/
+'''                   | |                              
+'''                   |_|                              
+'''
+'''
+'''		Inserting random values into iProperties
+
+
+'' Summary Tab
+'iProperties.Value("Summary", "Title") = "TitleTitle"
+'iProperties.Value("Summary", "Subject") = "SubjectSubject"
+'iProperties.Value("Summary", "Author") = "AuthorAuthor"
+'iProperties.Value("Summary", "Manager") = "ManagerManager"
+'iProperties.Value("Summary", "Company") = "CompanyCompany"
+'iProperties.Value("Summary", "Category") = "CategoryCategory"
+'iProperties.Value("Summary", "Keywords") = "KeywordsKeywords"
+'iProperties.Value("Summary", "Comments") = String.Join("\" & vbNewLine, Strings.Split(ThisApplication.FileLocations.FileLocationsFile,"\"))
+
+
+'' Project Tab
+'iProperties.Value("Project", "Part Number") = "PartNumberPartNumber"
+'iProperties.Value("Project", "Stock Number") = ThisApplication.GeneralOptions.UndoFileSize '"StockNumberStockNumber"
+'iProperties.Value("Project", "Description") = "DescriptionDescription"
+'iProperties.Value("Project", "Revision Number") = ThisApplication.GeneralOptions.TextSize '"RevisionNumberRevisionNumber"
+'iProperties.Value("Project", "Project") = ThisApplication.FileLocations.FileLocationsFile '"ProjectProject"
+'iProperties.Value("Project", "Designer") = ThisApplication.FileLocations.Workspace '"DesignerDesigner"
+'iProperties.Value("Project", "Engineer") = String.Join(", ", {"Doe", "John" }) '"EngineerEngineer"
+'iProperties.Value("Project", "Authority") = "AuthorityAuthority"
+'iProperties.Value("Project", "Cost Center") = ThisApplication.GeneralOptions.TextAppearance '"CostCenterCostCenter"
+'iProperties.Value("Project", "Estimated Cost") = ThisApplication.GeneralOptions.AnnotationScale '"EstimatedCostEstimatedCost"
+'iProperties.Value("Project", "Creation Date") = Date.Today()		' To clear set to "1601-01-01"
+'iProperties.Value("Project", "Vendor") = "VendorVendor"
+'iProperties.Value("Project", "WEB Link") = "WEBLinkWEBLink"
+
+
+'' Status Tab
+'iProperties.Value("Status", "Status") = "StatusStatus"
+'iProperties.Value("Status", "Design State") = 3						' Work_In_Progress = 1, Pending = 2, Released = 3
+'iProperties.Value("Status", "Checked By") = ThisApplication.GeneralOptions.UserName
+'iProperties.Value("Status", "Checked Date") = Date.Today()			' To clear set to "1601-01-01"
+'iProperties.Value("Status", "Eng. Approved By") = "GJR"
+'iProperties.Value("Status", "Eng. Approved Date") = "2002-02-03"
+'iProperties.Value("Status", "Mfg. Approved By") = "GHK"
+'iProperties.Value("Status", "Mfg. Approved Date") = "2004-02-03"
+
+'' TODO - Query File Status Fields
+'' Checked Out By
+'' Checked Out
+'' Checkout Workgroup
+'' Checkout Workspace
