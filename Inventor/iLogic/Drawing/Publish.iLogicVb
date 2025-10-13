@@ -1,0 +1,90 @@
+﻿'''
+'''   _____       _     _ _     _     
+'''  |  __ \     | |   | (_)   | |    
+'''  | |__) |   _| |__ | |_ ___| |__  
+'''  |  ___/ | | | '_ \| | / __| '_ \ 
+'''  | |   | |_| | |_) | | \__ \ | | |
+'''  |_|    \__,_|_.__/|_|_|___/_| |_|
+'''
+
+
+''' Main
+Sub main()
+	Dim RevisionNumber As String = GetSetRevisionNumber()
+	Dim PartNumber As String = GetSetPartNumber(RevisionNumber)
+	Dim PublishPath As String = GetPublishPath(RevisionNumber, PartNumber)
+	
+	Publish(RevisionNumber, PartNumber, PublishPath)
+End Sub
+
+
+''' GetSetRevisionNumber
+Function GetSetRevisionNumber() As String
+	Dim RevisionNumber As String
+	''' GetRevisionNumber
+	RevisionNumber = iProperties.Value("Project", "Revision Number")
+	''' GetRevisionNumberInput
+	Dim RevisionNumberInput As String
+	RevisionNumberInput = _
+		InputBox("Input Revision Number", "Revision Number", iProperties.Value("Project", "Revision Number"), 0, 0)
+	''' ValidateInput
+	'		Many questions could be asked about user input and
+	'		any property of this document, or it's references.
+	''' SetRevisionNumber
+	RevisionNumber = RevisionNumberInput
+	iProperties.Value("Project", "Revision Number") = RevisionNumber
+	Return RevisionNumber
+End Function
+
+
+''' GetSetPartNumber
+Function GetSetPartNumber(ByVal RevisionNumber As String) As String
+	Dim PartNumber As String
+	''' GetPartNumber
+	PartNumber = iProperties.Value("Project", "Part Number")
+	''' GetPartNumberInput
+	Dim PartNumberInput As String
+	PartNumberInput = _
+		InputBox("Input Part Number", "Part Number", iProperties.Value("Project", "Part Number"), 100, 0)
+	''' ValidateInput
+	'		Many questions could be asked about user input and
+	'		any property of this document, or it's references.
+	''' SetPartNumber
+	PartNumber = PartNumberInput
+	iProperties.Value("Project", "Part Number") = PartNumber
+	Return PartNumber
+End Function
+
+
+''' GetPublishPath
+Function GetPublishPath(ByVal RevisionNumber As String, ByRef PartNumber As String) As String
+	Dim PublishPath As String
+	''' GetPublishPath
+	''' ValidateInput
+	'		Many questions could be asked about user input and
+	'		any property of this document, or it's references.
+	PublishPath = "c:\foo\"
+	Return PublishPath
+End Function
+
+
+''' Publish
+Sub Publish(ByVal RevisionNumber As String, ByVal PartNumber As String, ByVal PublishPath As String)
+	Select Case ThisApplication.ActiveDocumentType
+	Case DocumentTypeEnum.kDrawingDocumentObject
+		MessageBox.Show("Publish Drawing", "ActiveDocumentType")
+	Case DocumentTypeEnum.kAssemblyDocumentObject
+		MessageBox.Show("Publish Assembly", "ActiveDocumentType")
+	Case DocumentTypeEnum.kPartDocumentObject
+		MessageBox.Show("Publish Part", "ActiveDocumentType")
+	Case Else
+		MessageBox.Show("Unknown doc type", "Active Document Unknown Error")
+		exit sub
+	End Select
+	
+	''' The usual stuff.
+	''' Check what document type this rule is run in.
+	''' publish pertinet formats.
+	''' include referenced documents if appropriate.
+End Sub
+
