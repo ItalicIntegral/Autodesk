@@ -1,0 +1,113 @@
+﻿'''
+'''   _____                     _             
+'''  |  __ \                   (_)            
+'''  | |  | |_ __ __ ___      ___ _ __   __ _ 
+'''  | |  | | '__/ _` \ \ /\ / / | '_ \ / _` |
+'''  | |__| | | | (_| |\ V  V /| | | | | (_| |
+'''  |_____/|_|  \__,_| \_/\_/ |_|_| |_|\__, |
+'''                                      __/ |
+'''                                     |___/ 
+'''
+
+
+' Check if active document is a drawing file
+If Not (ThisApplication.ActiveDocumentType = DocumentTypeEnum.kDrawingDocumentObject) Then
+	MessageBox.Show("Run rule from drawing", "Active Document Type Error")
+	Exit Sub ' Abort execution
+End If
+
+
+' Loop through all documents referenced by drawing
+Dim doc = ThisDrawing.ModelDocument ' First view referenced document
+If doc Is Nothing Then
+	MessageBox.Show("No primary referenced document found")
+	Exit Sub
+End If
+'For Each doc As Document In ThisDrawing.Document.AllReferencedDocuments
+
+	' Check if referenced document is an assembly or part
+	If doc.DocumentType = DocumentTypeEnum.kAssemblyDocumentObject Or doc.DocumentType = DocumentTypeEnum.kPartDocumentObject Then
+		
+		''' OpenDocument
+		On Error Resume Next
+		ThisApplication.Documents.Open(doc.FullDocumentName)
+		If Err.Number <> 0 Then
+			MessageBox.Show("Unable to open document")
+			Exit Sub	
+		End If
+		On Error GoTo 0 ' Reset error handling
+		
+		' Export STEP, 3D PDF, ect
+		
+		' Check if referenced document is a part
+		If doc.DocumentType = DocumentTypeEnum.kPartDocumentObject Then
+			
+			' Check if part is sheet metal type
+			'Dim SheetMetal As SheetMetalComponentDefinition = oDrawDoc.ComponentDefinition
+			
+			If TypeOf doc.ComponentDefinition Is SheetMetalComponentDefinition Then
+				If doc.ComponentDefinition.HasFlatPattern = False Then
+					'MessageBox.Show("sheet metal has no flat pattern")
+					doc.ComponentDefinition.FlatPattern.Unfold()
+					MessageBox.Show("sheet metal should be unfolded.")
+				Else
+					MessageBox.Show("sheet metal has flat pattern")
+					doc.ComponentDefinition.FlatPattern.Edit()
+					MessageBox.Show("sheet metal should be unfolded.")
+					
+				End If
+				doc.ComponentDefinition.FlatPattern.ExitEdit()
+				MessageBox.Show("sheet metal should be folded up again.")
+				
+				
+				''' https://www.cadforum.cz/en/export-unfolds-of-sheetmetal-parts-to-dxf-parameters-for-ilogic-tip12392
+				
+				
+				
+			End If
+			
+		End If
+		
+		MessageBox.Show("")
+		doc.Close ' Close document
+
+	Else
+		MessageBox.Show("NOT an assembly or a part")
+	End If
+
+'Next doc
+
+
+
+''' IGNORE
+'Dim doc = ThisDrawing.ModelDocument
+
+
+'MessageBox.Show(ThisApplication.ActiveDocumentType, "ThisApplication.ActiveDocumentType")
+'MessageBox.Show(ThisApplication.ActiveDocumentType.GetTypeCode, "ThisApplication.ActiveDocumentType.GetTypeCode")
+'MessageBox.Show(ThisApplication.ActiveDocumentType.GetHashCode, "ThisApplication.ActiveDocumentType.GetHashCode")
+'MessageBox.Show(DocumentTypeEnum.kDrawingDocumentObject, "DocumentTypeEnum.kDrawingDocumentObject")
+
+'ThisApplication.Caption = "Inventor"
+'MessageBox.Show(ThisApplication.Caption)
+'MessageBox.Show(ThisApplication.UserName, "ThisApplication.UserName")
+
+'MessageBox.Show(ThisDoc.Path, "ThisDoc.Path")
+'MessageBox.Show(ThisDoc.PathAndFileName(True), "ThisDoc.PathAndFileName")
+
+'MessageBox.Show(ThisDoc.Document.InternalName, "ThisDoc.Document.InternalName")
+'MessageBox.Show(ThisDoc.Document.DisplayName, "ThisDoc.Document.DisplayName")
+'MessageBox.Show(ThisDoc.Document.FullFileName, "ThisDoc.Document.FullFileName")
+'MessageBox.Show(ThisDoc.Document.FullDocumentName, "ThisDoc.Document.FullDocumentName")
+
+'MessageBox.Show(ThisDoc.Document.AllReferencedDocuments.Count, "ThisDoc.Document.AllReferencedDocuments.Count")
+
+
+'	MessageBox.Show(doc.FullFileName)
+'	MessageBox.Show(doc.DisplayName)
+
+
+''' References
+''' https://forums.autodesk.com/t5/inventor-programming-forum/flat-pattern-dxf-export-layer-config/td-p/11387601
+''' https://www.cadforum.cz/en/export-unfolds-of-sheetmetal-parts-to-dxf-parameters-for-ilogic-tip12392
+''' 
