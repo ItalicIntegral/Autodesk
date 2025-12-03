@@ -1,0 +1,40 @@
+﻿Sub Main()
+
+	' If no sheet metal flat pattern has been created
+	If ThisDoc.Document.ComponentDefinition.FlatPattern Is Nothing Then
+		MessageBox.Show("This sheet metal part contains no flat pattern", "No Flat Pattern", _
+			MessageBoxButtons.OK, MessageBoxIcon.Asterisk, MessageBoxDefaultButton.Button1)
+		Exit Sub
+	End If
+	
+	Dim ThicknessDescription As String
+	If Math.IEEERemainder(Thickness, 0.0625) = 0.000 Then
+		SheetGauge = String.Empty
+		ThicknessDescription = RoundToFraction(Thickness, 1 / 16, RoundingMethod.Round)
+	Else
+		If Not SheetGauge = String.Empty Then
+			ThicknessDescription = Format(CDbl(Thickness), "F3") & " (" & SheetGauge & "GA)"
+		Else
+			MessageBox.Show("Sheet metal gauge not specified. Unable to set description.")
+			Exit Sub
+		End If
+	End If
+
+	Dim WidthDescription = RoundToFraction(SheetMetal.FlatExtentsWidth, 1 / 16, RoundingMethod.Round)
+	Dim LengthDescription As String = RoundToFraction(SheetMetal.FlatExtentsLength, 1 / 16, RoundingMethod.Round)
+	
+	Dim ParsedDescription As String = "PL " & ThicknessDescription & " x " & WidthDescription & " x " & LengthDescription
+	
+	If iProperties.Value("Project", "Description") <> ParsedDescription Then
+		MessageBox.Show("Non-matching description found.")
+		
+		If MessageBox.Show("Description iProperty appears incorrect. Update?" _
+			& vbNewLine & ParsedDescription, "Update Description", _
+			MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) = vbYes Then
+			
+			MessageBox.Show("Update description desired.")
+			iProperties.Value("Project", "Description") = ParsedDescription
+		End If
+	End If
+	
+End Sub
